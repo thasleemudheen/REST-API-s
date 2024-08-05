@@ -1,7 +1,12 @@
 const jwt=require('jsonwebtoken')
 require('dotenv').config()
+// const cookieparser=require('cookie-parser')
+// const express=require('express')
+// const app=express()
+// app.use(cookieparser())
 const verifyAdmin=async(req,res,next)=>{
-    //  const token=req.cookies.adminToken
+    //  const toks=req.cookie.adminToken
+    //  console.log(toks)
     const authHeader=req.headers.authorization
     // console.log(authHeader)
     if (!authHeader) {

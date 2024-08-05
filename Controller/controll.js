@@ -11,7 +11,7 @@ app.use(bodyparser.json())
 const home=async(req,res)=>{
     try {
         const moviesList=await Movie.find()
-        console.log(moviesList)
+        // console.log(moviesList)
         res.status(200).json(moviesList)
     } catch (error) {
         console.log('something went wrong with showing movies')
@@ -47,12 +47,12 @@ const loginPostPage=async(req,res)=>{
     const {email,password}=req.query;
     try {
         const user=await User.findOne({email})
-    console.log(user)
+    // console.log(user)
     if(!user){
         return res.status(400).json({message:'user does not exist with this email'})
     }
     const validPassword=await bcrypt.compare(password,user.password)
-    console.log(validPassword)
+    // console.log(validPassword)
     if(!validPassword){
         return res.status(400).json({message:'password is not valid'})
     }
@@ -66,15 +66,40 @@ const loginPostPage=async(req,res)=>{
     res.cookie('token',token,{httpOnly:true,maxAge:86400000})
     return res.status(200).json({message:'user login successfully'})
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         res.status(500).json({message:'something went wrong while uesr login'})
     }
     
+}
+const changeProfile=async(req,res)=>{
+   const token=req.cookies.token
+   const {...profile}=req.query
+  try {
+    // console.log(token)
+    if(!token){
+     return res.status(404).json({message:'token not found'})
+    }
+    const decoded=jwt.verify(token,process.env.JWT_SECRET)
+    const userId=decoded.id
+    console.log(userId)
+    const user=await User.findOneAndUpdate({_id:userId},profile,{new:true})
+    if(!user){
+        return res.status(404).json({message:'user not updated'})
+    }
+    res.status(200).json({message:'profile updated successfully'})
+    console.log(user)
+    console.log(profile)
+  } catch (error) {
+      console.log('user profile is not updated')
+      res.status(500).json({message:'somthing went wrong with updating user details'})
+  }
+  
 }
  
 module.exports={
     home,
    signUpPostPage,
    loginPostPage,
+   changeProfile
     
 }

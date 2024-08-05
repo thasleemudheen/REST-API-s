@@ -84,12 +84,33 @@ const adminDeleteMovies=async(req,res)=>{
         res.status(500).json({message:'there is an error with deleting the movie'})
     }
 }
-
+const adminEditMovies=async(req,res)=>{
+    try {
+        const {movieId,...details}=req.query
+        console.log(movieId)
+        console.log(details)
+        if(!movieId){
+            return res.status(404).json({message:'movieId is not getting'})
+        }
+        console.log('its here')
+        const movies = await Movie.findOneAndUpdate({movieId}, details, { new: true });
+        console.log(movies)
+        if(!movies){
+            return res.status(400).json({message:'movies not found'})
+        }
+        res.status(200).json({message:'movie details updated successfully'})
+    } catch (error) {
+        console.log('something went wrong with the editing')
+        res.status(404).json({message:'there is an error with updating the details'})
+    }
+   
+}
 
 module.exports={
     adminLogin,
     addProduct,
     listMovies,
-    adminDeleteMovies
+    adminDeleteMovies,
+    adminEditMovies
 }
 
