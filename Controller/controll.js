@@ -2,13 +2,23 @@ const express =require('express')
 const app=express()
 const User=require('../model/userModel')
 const bodyparser=require('body-parser')
+const Movie=require('../model/movieModel')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 require('dotenv').config()
 app.use(bodyparser.json())
-const home=((req,res)=>{
-    res.send('thasleemudheen')
-})
+
+const home=async(req,res)=>{
+    try {
+        const moviesList=await Movie.find()
+        console.log(moviesList)
+        res.status(200).json(moviesList)
+    } catch (error) {
+        console.log('something went wrong with showing movies')
+        res.status(500).json({message:'internal server error'})
+    }
+    
+}
 const signUpPostPage=async(req,res)=>{
        const {name,email,password}=req.query
        if(!name || !email || !password){
@@ -61,6 +71,7 @@ const loginPostPage=async(req,res)=>{
     }
     
 }
+ 
 module.exports={
     home,
    signUpPostPage,

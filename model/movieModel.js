@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 
-const moveiSchema=new mongoose.schema({
+const moveiSchema=new mongoose.Schema({
           movieName:{
             type:String,
             required:true
@@ -13,8 +13,12 @@ const moveiSchema=new mongoose.schema({
             type:String,
             required:true
           },
-          duration:{
-            type:Number,
+          language:{
+            type:String,
+            required:true
+          },
+          movieId:{
+            type:String,
             required:true
           }
 })
