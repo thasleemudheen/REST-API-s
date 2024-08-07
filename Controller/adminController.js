@@ -7,7 +7,7 @@ require('dotenv').config()
 
 const adminLogin=async(req,res)=>{
     try {
-        const {email,password}=req.query
+        const {email,password}=req.body
         const admin=await Admin.findOne({email})
         if(!admin){
             return res.status(404).json({message:'admin not found'})
@@ -37,7 +37,7 @@ const adminLogin=async(req,res)=>{
 
 const addProduct=async(req,res)=>{
     
-    const {movieName,moviePrice,description,language,movieId}=req.query
+    const {movieName,moviePrice,description,language,movieId}=req.body
     try {
         
         if(!movieName||!moviePrice || !description || !language || !movieId){

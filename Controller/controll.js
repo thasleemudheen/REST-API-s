@@ -20,7 +20,7 @@ const home=async(req,res)=>{
     
 }
 const signUpPostPage=async(req,res)=>{
-       const {name,email,password}=req.query
+       const {name,email,password}=req.body
        if(!name || !email || !password){
        return res.status(404).json({message:'not getting the user details '})
        }
@@ -44,7 +44,7 @@ const signUpPostPage=async(req,res)=>{
        
 }
 const loginPostPage=async(req,res)=>{
-    const {email,password}=req.query;
+    const {email,password}=req.body;
     try {
         const user=await User.findOne({email})
     // console.log(user)
@@ -64,7 +64,7 @@ const loginPostPage=async(req,res)=>{
         expiresIn:'24h'
     })
     res.cookie('token',token,{httpOnly:true,maxAge:86400000})
-    return res.status(200).json({message:'user login successfully'})
+    return res.status(200).json({message:'user login successfully',token})
     } catch (error) {
         // console.log(error)
         res.status(500).json({message:'something went wrong while uesr login'})
@@ -73,7 +73,7 @@ const loginPostPage=async(req,res)=>{
 }
 const changeProfile=async(req,res)=>{
    const token=req.cookies.token
-   const {...profile}=req.query
+   const {...profile}=req.body
   try {
     // console.log(token)
     if(!token){
@@ -95,11 +95,22 @@ const changeProfile=async(req,res)=>{
   }
   
 }
+const logOutUser=async(req,res)=>{
+    try {
+        const token=req.user
+        console.log(token)
+        res.clearCookie('token')
+        res.status(200).json({message:'token founded and logout'})
+    } catch (error) {
+         res.status(500).json({message:'internal server error'})
+    }
+}
  
 module.exports={
     home,
    signUpPostPage,
    loginPostPage,
-   changeProfile
+   changeProfile,
+   logOutUser
     
 }

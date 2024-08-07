@@ -5,6 +5,8 @@ const userRouter=require('./Routes/route')
 const adminRoute=require('./Routes/adminRout')
 const bodyparser=require('body-parser')
 const cookieparser=require('cookie-parser')
+const {swaggerui,swaggerSpec}=require('./swaggerConfig')
+app.use('/api-doc',swaggerui.serve,swaggerui.setup(swaggerSpec))
 app.use(cookieparser())
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended:true}))
@@ -23,6 +25,6 @@ app.use('/',adminRoute)
     
  }
  mongoDB()
-app.listen(3001,()=>{
-    console.log('port running at http://localhost:3001/ ')
+app.listen(3004,()=>{
+    console.log('port running at http://localhost:3004/ ')
 })
